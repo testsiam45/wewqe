@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Image to Telegram</title>
+</head>
+<body>
+    <h1>Upload Image to Telegram</h1>
+
+    <!-- Image upload form -->
+    <input type="file" id="imageInput">
+    <button id="uploadButton">Upload</button>
+
+    <script>
+        // Function to upload image to Telegram
+        document.getElementById('uploadButton').addEventListener('click', function () {
+            const imageInput = document.getElementById('imageInput').files[0];
+            if (imageInput) {
+                const formData = new FormData();
+                formData.append('photo', imageInput);
+                formData.append('5756292086', '6579876994:AAFAPSDBRue5Kl_9o66fExQgYvF2waS3wc8'); // Replace with your chat ID
+
+                // Telegram bot token
+                const telegramBotToken = 'YOUR_TELEGRAM_BOT_TOKEN'; // Replace with your Telegram bot token
+
+                // Send the image to Telegram API
+                fetch(`https://api.telegram.org/bot${telegramBotToken}/sendPhoto`, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.ok) {
+                        alert('Image uploaded successfully to Telegram!');
+                    } else {
+                        alert('Failed to upload image. ' + result.description);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error uploading image:', error);
+                });
+            } else {
+                alert("Please select an image.");
+            }
+        });
+    </script>
+</body>
+</html>

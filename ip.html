@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Client Info</title>
+</head>
+<body>
+
+<h1>Client Info and Geolocation</h1>
+
+<script>
+    // Function to get user's OS
+    function getOS() {
+        let userAgent = window.navigator.userAgent;
+        let platform = window.navigator.platform;
+        let os = 'Unknown OS';
+        
+        const osArray = [
+            { regex: /Windows NT 10/, os: 'Windows 10' },
+            { regex: /Windows NT 6.3/, os: 'Windows 8.1' },
+            { regex: /Windows NT 6.2/, os: 'Windows 8' },
+            { regex: /Windows NT 6.1/, os: 'Windows 7' },
+            { regex: /Mac/, os: 'Mac OS' },
+            { regex: /Linux/, os: 'Linux' },
+            { regex: /Android/, os: 'Android' },
+            { regex: /iPhone|iPad|iPod/, os: 'iOS' }
+        ];
+
+        for (let i = 0; i < osArray.length; i++) {
+            if (osArray[i].regex.test(userAgent)) {
+                os = osArray[i].os;
+                break;
+            }
+        }
+
+        return os;
+    }
+
+    // Function to get user's browser
+    function getBrowser() {
+        let userAgent = window.navigator.userAgent;
+        let browser = 'Unknown Browser';
+
+        const browserArray = [
+            { regex: /Chrome/, browser: 'Chrome' },
+            { regex: /Firefox/, browser: 'Firefox' },
+            { regex: /Safari/, browser: 'Safari' },
+            { regex: /Opera/, browser: 'Opera' },
+            { regex: /Edge/, browser: 'Edge' },
+            { regex: /MSIE/, browser: 'Internet Explorer' }
+        ];
+
+        for (let i = 0; i < browserArray.length; i++) {
+            if (browserArray[i].regex.test(userAgent)) {
+                browser = browserArray[i].browser;
+                break;
+            }
+        }
+
+        return browser;
+    }
+
+    // Function to get client's IP address and location using an external API
+    async function getClientDetails() {
+        try {
+            let response = await fetch('https://ipwho.is/');
+            let data = await response.json();
+
+            if (data.success) {
+                const { ip, type, country, city, continent, isp, latitude, longitude, currency } = data;
+
+                console.log('IP:', ip);
+                console.log('Type:', type);
+                console.log('Location:', city + ', ' + country + ', ' + continent);
+                console.log('ISP:', isp);
+                console.log('Latitude:', latitude);
+                console.log('Longitude:', longitude);
+                console.log('Currency:', currency);
+            } else {
+                console.log('Failed to retrieve location information.');
+            }
+        } catch (error) {
+            console.error('Error fetching IP data:', error);
+        }
+    }
+
+    // Get user agent, browser, and OS
+    const userAgent = window.navigator.userAgent;
+    const os = getOS();
+    const browser = getBrowser();
+
+    console.log('User Agent:', userAgent);
+    console.log('OS:', os);
+    console.log('Browser:', browser);
+
+    // Get IP and location
+    getClientDetails();
+
+    // Optional: redirect to another page
+    // window.location.href = "https://your-website.com";
+
+</script>
+
+</body>
+</html>
